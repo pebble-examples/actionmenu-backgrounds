@@ -1,0 +1,24 @@
+{
+  "uuid": "441e699b-f84f-4b04-9208-46da5db36087",
+  "shortName": "ActionMenu Backgrounds",
+  "longName": "ActionMenu Backgrounds",
+  "companyName": "Pebble",
+  "versionLabel": "1.0",
+  "sdkVersion": "3",
+  "targetPlatforms": ["basalt"],
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": [
+      {
+        "type": "png",
+        "name": "ELLIPSIS",
+        "file": "music_icon_ellipsis.png"
+      }
+    ]
+  }
+}
