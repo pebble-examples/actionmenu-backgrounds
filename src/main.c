@@ -72,13 +72,25 @@ static void window_load(Window *window) {
   action_bar_layer_set_icon(s_action_bar, BUTTON_ID_SELECT, s_ellipsis_bitmap);
   action_bar_layer_add_to_window(s_action_bar, window);
 
-  s_label_layer = text_layer_create(GRect(0, 0, bounds.size.w - ACTION_BAR_WIDTH, bounds.size.h));
+  s_label_layer = text_layer_create(GRect(bounds.origin.x, bounds.origin.y, bounds.size.w - ACTION_BAR_WIDTH, bounds.size.h));
   text_layer_set_text(s_label_layer, "Choose a background color.");
   text_layer_set_font(s_label_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_color(s_label_layer, s_visible_color);
   text_layer_set_background_color(s_label_layer, GColorClear);
   text_layer_set_text_alignment(s_label_layer, GTextAlignmentCenter);
   layer_add_child(window_layer, text_layer_get_layer(s_label_layer));
+
+#if defined(PBL_ROUND)
+  // Center vertically
+  GSize text_size = text_layer_get_content_size(s_label_layer);
+  layer_set_frame(text_layer_get_layer(s_label_layer), GRect(
+    bounds.origin.x, (bounds.size.h - text_size.h) / 2, 
+    bounds.size.w - ACTION_BAR_WIDTH, bounds.size.h
+  ));
+
+  // Enable paging
+  text_layer_enable_screen_text_flow_and_paging(s_label_layer, 3);
+#endif
 }
 
 static void window_unload(Window *window) {
