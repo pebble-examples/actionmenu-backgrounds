@@ -15,8 +15,12 @@ static ActionMenuLevel *s_root_level;
 /********************************* ActionMenu *********************************/
 
 static void action_performed_callback(ActionMenu *action_menu, const ActionMenuItem *action, void *context) {
+#ifdef PBL_COLOR
   // An action was selected, determine which one
   s_color = *(GColor*)action_menu_item_get_action_data(action);
+#else
+  text_layer_set_text(s_label_layer, (char*)action_menu_item_get_action_data(action));
+#endif
 
   // Update background color
   window_set_background_color(s_main_window, s_color);
@@ -31,11 +35,16 @@ static void init_action_menu() {
   s_root_level = action_menu_level_create(NUM_ITEMS);
 
   // Set up the actions for this level, using action context to pass colors
-  action_menu_level_add_action(s_root_level, "Red", action_performed_callback, &GColorRed);
-  action_menu_level_add_action(s_root_level, "Blue", action_performed_callback, &GColorBlue);
-  action_menu_level_add_action(s_root_level, "Yellow", action_performed_callback, &GColorChromeYellow);
-  action_menu_level_add_action(s_root_level, "Green", action_performed_callback, &GColorGreen);
-  action_menu_level_add_action(s_root_level, "White", action_performed_callback, &GColorWhite);
+  action_menu_level_add_action(s_root_level, "Red", action_performed_callback,
+                               PBL_IF_COLOR_ELSE(&GColorRed, (char*)"Red"));
+  action_menu_level_add_action(s_root_level, "Blue", action_performed_callback,
+                               PBL_IF_COLOR_ELSE(&GColorBlue, (char*)"Blue"));
+  action_menu_level_add_action(s_root_level, "Yellow", action_performed_callback,
+                               PBL_IF_COLOR_ELSE(&GColorChromeYellow, (char*)"Yellow"));
+  action_menu_level_add_action(s_root_level, "Green", action_performed_callback,
+                               PBL_IF_COLOR_ELSE(&GColorGreen, (char*)"Green"));
+  action_menu_level_add_action(s_root_level, "White", action_performed_callback,
+                               PBL_IF_COLOR_ELSE(&GColorWhite, (char*)"White"));
 }
 
 /*********************************** Clicks ***********************************/
@@ -73,7 +82,7 @@ static void window_load(Window *window) {
   action_bar_layer_add_to_window(s_action_bar, window);
 
   s_label_layer = text_layer_create(GRect(bounds.origin.x, bounds.origin.y, bounds.size.w - ACTION_BAR_WIDTH, bounds.size.h));
-  text_layer_set_text(s_label_layer, "Choose a background color.");
+  text_layer_set_text(s_label_layer, PBL_IF_COLOR_ELSE("Choose a background color.", "Choose a color."));
   text_layer_set_font(s_label_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   text_layer_set_text_color(s_label_layer, s_visible_color);
   text_layer_set_background_color(s_label_layer, GColorClear);
