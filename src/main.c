@@ -30,12 +30,21 @@ static void init_action_menu() {
   // Create the root level
   s_root_level = action_menu_level_create(NUM_ITEMS);
 
+#ifdef PBL_COLOR
   // Set up the actions for this level, using action context to pass colors
   action_menu_level_add_action(s_root_level, "Red", action_performed_callback, &GColorRed);
   action_menu_level_add_action(s_root_level, "Blue", action_performed_callback, &GColorBlue);
   action_menu_level_add_action(s_root_level, "Yellow", action_performed_callback, &GColorChromeYellow);
   action_menu_level_add_action(s_root_level, "Green", action_performed_callback, &GColorGreen);
   action_menu_level_add_action(s_root_level, "White", action_performed_callback, &GColorWhite);
+#else
+  // Set up the actions for this level, using action context to pass colors
+  action_menu_level_add_action(s_root_level, "Black", action_performed_callback, &GColorBlack);
+  action_menu_level_add_action(s_root_level, "White", action_performed_callback, &GColorWhite);
+  action_menu_level_add_action(s_root_level, "Gray", action_performed_callback, &GColorLightGray);
+#endif
+
+  
 }
 
 /*********************************** Clicks ***********************************/
